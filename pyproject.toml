@@ -1,0 +1,36 @@
+[project]
+name = "airheads"
+version = "0.1.0"
+description = "Helper library for building social media cards, SEO tags, and head elements with air"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = []
+authors = [
+    { name = "Kentro Tech" }
+]
+license = { text = "MIT" }
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Internet :: WWW/HTTP :: Dynamic Content",
+]
+keywords = ["air", "html", "seo", "open-graph", "twitter-cards", "social-media", "meta-tags"]
+
+[project.urls]
+Homepage = "https://github.com/kentro-tech/air-socials"
+Repository = "https://github.com/kentro-tech/air-socials"
+Issues = "https://github.com/kentro-tech/air-socials/issues"
+
+[project.optional-dependencies]
+dev = []
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/airheads"]

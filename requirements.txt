@@ -1,0 +1,8 @@
+# Install Air framework from submodule
+air
+
+# Install airheads library
+airheads
+
+# Web server for production
+uvicorn[standard]
