@@ -11,22 +11,25 @@ Example is deployed here, for testing: https://airheads-production.up.railway.ap
 
 `airheads` makes it easy to create properly formatted meta tags for:
 
-- **SEO** - Standard meta tags for search engines
-- **Open Graph** - Facebook, LinkedIn, and other social platforms
-- **Twitter Cards** - Twitter/X social sharing
-- **Favicons** - Icons for various platforms and sizes
-- **JSON-LD** - Structured data for rich search results
+- **SEO** - Standard meta tags that improve search engine visibility and ranking.
+- **Open Graph** - Meta tags that control how your content appears when shared on Facebook, LinkedIn, and other social platforms.
+- **Twitter Cards** - Special meta tags that create rich previews on Twitter/X. These make your shared links stand out with images and descriptions.
+- **Favicons** - Small icons that appear in browser tabs, bookmarks, and home screens. They help users quickly identify your site.
+- **JSON-LD** - Structured data that search engines use to create rich snippets (star ratings, prices, etc.) in search results. This can significantly improve click-through rates.
 
 ## Installation
 
-Since this library depends on the Air framework as a submodule:
+This library requires the Air framework to be installed separately:
 
 ```bash
-# Install from PyPI (requires air to be installed separately)
+# First, install Air framework
+pip install air
+
+# Then install airheads
 pip install airheads
 
 # Or with uv
-uv add airheads
+uv add air airheads
 ```
 
 ## Quick Start
@@ -117,7 +120,7 @@ head = Head(
 
 ### JSON-LD Structured Data
 
-Add structured data for rich search results:
+Add structured data to help search engines display rich results (star ratings, recipes, events, etc.):
 
 ```python
 import json
@@ -152,7 +155,7 @@ head = build_social_head(
 
 ### `build_social_head()`
 
-The main convenience function that builds a complete `Head` tag with all social and SEO elements.
+The main convenience function that builds a complete `Head` tag with all social and SEO elements. Use this when you want everything set up correctly in one call without managing individual tag groups.
 
 **Signature:**
 ```python
@@ -186,7 +189,7 @@ build_social_head(
 
 ### `build_seo_meta()`
 
-Build standard SEO meta tags.
+Build standard SEO meta tags. These improve your search engine visibility and help search engines understand your content's title, description, and keywords.
 
 **Parameters:**
 - `title` (str): Page title
@@ -201,7 +204,7 @@ Build standard SEO meta tags.
 
 ### `build_open_graph()`
 
-Build Open Graph meta tags for Facebook, LinkedIn, and other platforms.
+Build Open Graph meta tags for Facebook, LinkedIn, and other platforms. These control how your content appears when shared on social media, including the preview image, title, and description.
 
 **Parameters:**
 - `title` (str): Content title
@@ -218,7 +221,7 @@ Build Open Graph meta tags for Facebook, LinkedIn, and other platforms.
 
 ### `build_twitter_card()`
 
-Build Twitter Card meta tags.
+Build Twitter Card meta tags. These create rich previews on Twitter/X with images and descriptions, making your shared links more engaging.
 
 **Parameters:**
 - `card_type` (str): Type of card (default: "summary_large_image")
@@ -231,7 +234,7 @@ Build Twitter Card meta tags.
 
 ### `build_favicon_links()`
 
-Build favicon and icon link tags.
+Build favicon and icon link tags. These display your site's icon in browser tabs, bookmarks, and mobile home screens, helping users quickly identify your site.
 
 **Parameters:**
 - `favicon_ico` (str, optional): Path to .ico favicon (default: "/favicon.ico")
@@ -243,7 +246,7 @@ Build favicon and icon link tags.
 
 ### `build_json_ld()`
 
-Build a JSON-LD structured data script tag.
+Build a JSON-LD structured data script tag. This helps search engines create rich snippets (star ratings, prices, event details, etc.) in search results, which can improve click-through rates.
 
 **Parameters:**
 - `json_ld_script` (str): JSON-LD structured data as a string

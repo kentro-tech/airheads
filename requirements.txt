@@ -1,4 +1,4 @@
-# Install Air framework from submodule
+# Air framework (required dependency)
 air
 
 # Install airheads library
