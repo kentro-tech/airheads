@@ -11,8 +11,8 @@ Example is deployed here, for testing: https://airheads-production.up.railway.ap
 
 `airheads` makes it easy to create properly formatted meta tags for:
 
-- **SEO** - Standard meta tags that help search engines understand and rank your content. Use these to improve your site's visibility in search results.
-- **Open Graph** - Meta tags that control how your content appears when shared on Facebook, LinkedIn, and other social platforms. Without these, social platforms show generic previews.
+- **SEO** - Standard meta tags that improve search engine visibility and ranking.
+- **Open Graph** - Meta tags that control how your content appears when shared on Facebook, LinkedIn, and other social platforms.
 - **Twitter Cards** - Special meta tags that create rich previews on Twitter/X. These make your shared links stand out with images and descriptions.
 - **Favicons** - Small icons that appear in browser tabs, bookmarks, and home screens. They help users quickly identify your site.
 - **JSON-LD** - Structured data that search engines use to create rich snippets (star ratings, prices, etc.) in search results. This can significantly improve click-through rates.
