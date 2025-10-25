@@ -146,7 +146,7 @@ def test_build_social_head_with_extra_children():
         "Test",  # description - must be positional
         "https://example.com",  # url - must be positional
         "https://example.com/img.jpg",  # image - must be positional
-        script,  # Extra children come after required positional args
+        extra_children=[script],
     )
     head_str = str(head)
 
