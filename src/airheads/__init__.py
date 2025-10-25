@@ -10,7 +10,7 @@ from collections.abc import Sequence
 from air import Head, Link, Meta, Script, Title
 from air.tags.models.base import BaseTag
 
-__version__ = "0.2.0"
+__version__ = "0.3.0"
 __all__ = [
     "build_seo_meta",
     "build_open_graph",
@@ -317,29 +317,29 @@ def build_json_ld(
 
 
 def build_social_head(
-    title: str,
-    description: str,
-    url: str,
-    image: str,
-    *extra_children: BaseTag,
-    keywords: Sequence[str] | None = None,
-    image_alt: str | None = None,
-    image_width: int | None = 1200,
-    image_height: int | None = 630,
-    site_name: str | None = None,
-    twitter_site: str | None = None,
-    twitter_creator: str | None = None,
-    author: str | None = None,
-    canonical_url: str | None = None,
-    favicon_ico: str | None = "/favicon.ico",
-    theme_color: str | None = None,
-    og_type: str = "website",
-    twitter_card: str = "summary_large_image",
-    locale: str = "en_US",
-    robots: str = "index, follow",
-    viewport: str = "width=device-width, initial-scale=1.0",
-    charset: str = "utf-8",
-    **kwargs: str,
+title: str,
+description: str,
+url: str,
+image: str,
+keywords: Sequence[str] | None = None,
+image_alt: str | None = None,
+image_width: int | None = 1200,
+image_height: int | None = 630,
+site_name: str | None = None,
+twitter_site: str | None = None,
+twitter_creator: str | None = None,
+author: str | None = None,
+canonical_url: str | None = None,
+favicon_ico: str | None = "/favicon.ico",
+theme_color: str | None = None,
+og_type: str = "website",
+twitter_card: str = "summary_large_image",
+locale: str = "en_US",
+robots: str = "index, follow",
+viewport: str = "width=device-width, initial-scale=1.0",
+charset: str = "utf-8",
+extra_children: Sequence[BaseTag] | None = None,
+**kwargs: str,
 ) -> Head:
     """
     Build a complete Head tag with all social media, SEO, and standard elements.
@@ -352,7 +352,7 @@ def build_social_head(
         description: Page description
         url: Canonical URL
         image: Social sharing image URL
-        *extra_children: Additional tags to include in the head
+        extra_children: Additional tags to include in the head
         keywords: SEO keywords
         image_alt: Alt text for social image
         image_width: Image width in pixels (default: 1200)
@@ -448,6 +448,7 @@ def build_social_head(
     children.extend(og_tags)
     children.extend(twitter_tags)
     children.extend(favicon_tags)
-    children.extend(extra_children)
+    if extra_children:
+        children.extend(extra_children)
 
     return Head(*children, **kwargs)
