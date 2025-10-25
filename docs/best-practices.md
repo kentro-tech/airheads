@@ -72,7 +72,18 @@ Most pages benefit from 2-3 schema types:
 
 Test your implementation with these tools:
 
-### Social Media
+### Social Preview & Multi-Checker Sites
+
+These tools show how your content appears across multiple social platforms.  This is easiest:
+
+- [OpenGraph.xyz](https://www.opengraph.xyz/) - Preview Open Graph, Twitter Cards, and more
+- [HeyMeta](https://www.heymeta.com/) - Comprehensive social media preview tool
+- [SocialSharePreview](https://socialsharepreview.com/) - Previews for multiple platforms
+
+### Social Media Validators
+
+Platform-specific validators:
+
 - [Twitter Card Validator](https://cards-dev.twitter.com/validator)
 - [Facebook Sharing Debugger](https://developers.facebook.com/tools/debug/)
 - [LinkedIn Post Inspector](https://www.linkedin.com/post-inspector/)
@@ -80,7 +91,7 @@ Test your implementation with these tools:
 ### SEO & Structured Data
 - [Google Rich Results Test](https://search.google.com/test/rich-results)
 - [Schema Markup Validator](https://validator.schema.org/)
-- [Open Graph Preview Tools](https://www.opengraph.xyz/)
+- [W3C HTML Validator](https://validator.w3.org/nu/)
 
 ## Performance
 
