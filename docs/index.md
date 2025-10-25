@@ -6,11 +6,11 @@ A helper library for building social media cards, SEO tags, and head elements wi
 
 airheads generates the meta tags and structured data that make your site look good when shared on social media and rank better in search engines.
 
-- **SEO tags**: Title, description, keywords, canonical URLs
-- **Open Graph**: Facebook, LinkedIn, and other platform previews
-- **Twitter Cards**: Rich previews with images on Twitter/X
-- **Favicons**: Icons that appear in browser tabs and bookmarks
-- **Structured Data**: JSON-LD for rich search results
+- **SEO tags**: Title, description, keywords, canonical URLs.
+- **Open Graph**: Facebook, LinkedIn, and other platform previews.
+- **Twitter Cards**: Rich previews with images on Twitter/X.
+- **Favicons**: Icons that appear in browser tabs and bookmarks.
+- **Structured Data**: JSON-LD for rich search results.
 
 ## Quick start
 
