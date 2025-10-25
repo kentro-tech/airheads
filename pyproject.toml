@@ -1,10 +1,10 @@
 [project]
 name = "airheads"
-version = "0.1.0"
+version = "0.2.0"
 description = "Helper library for building social media cards, SEO tags, and head elements with air"
 readme = "README.md"
 requires-python = ">=3.13"
-dependencies = []
+dependencies = ["air"]
 authors = [
     { name = "Kentro Tech" }
 ]
@@ -21,12 +21,12 @@ classifiers = [
 keywords = ["air", "html", "seo", "open-graph", "twitter-cards", "social-media", "meta-tags"]
 
 [project.urls]
-Homepage = "https://github.com/kentro-tech/air-socials"
-Repository = "https://github.com/kentro-tech/air-socials"
-Issues = "https://github.com/kentro-tech/air-socials/issues"
+Homepage = "https://github.com/kentro-tech/airheads"
+Repository = "https://github.com/kentro-tech/airheads"
+Issues = "https://github.com/kentro-tech/airheads/issues"
 
 [project.optional-dependencies]
-dev = []
+dev = ["pytest", "ruff", "build", "twine"]
 
 [build-system]
 requires = ["hatchling"]
@@ -34,3 +34,20 @@ build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/airheads"]
+
+[tool.ruff]
+line-length = 150
+target-version = "py313"
+
+[tool.ruff.lint]
+select = ["E", "F", "I"]
+ignore = []
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+
+[dependency-groups]
+dev = [
+    "build>=1.3.0",
+]

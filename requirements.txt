@@ -1,8 +1,5 @@
 # Air framework (required dependency)
 air
 
-# Install airheads library
-airheads
-
 # Web server for production
 uvicorn[standard]

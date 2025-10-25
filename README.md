@@ -1,31 +1,25 @@
 # airheads
 
 > [!WARNING]
-> This is not ready for use.  Come back in a week or so!
+> While I think this library is ready to be used, I am not a SEO or metadata expert and have not extensively used it yet.  I will release this library in V1 status after a few months of real usage when I am confident it is solid.  I'd love help improving it!
 
 A helper library for building social media cards, SEO tags, and head elements with the [Air framework](https://github.com/airatplants/air).
 
-Example is deployed here, for testing: https://airheads-production.up.railway.app/
+There is an example app deployed here, for testing: https://airheads-production.up.railway.app/
 
 ## Overview
 
 `airheads` makes it easy to create properly formatted meta tags for:
 
-- **SEO** - Standard meta tags that improve search engine visibility and ranking.
-- **Open Graph** - Meta tags that control how your content appears when shared on Facebook, LinkedIn, and other social platforms.
-- **Twitter Cards** - Special meta tags that create rich previews on Twitter/X. These make your shared links stand out with images and descriptions.
+- **SEO** - Standard meta tags that improve search engine visibility & ranking.
+- **Open Graph** - Meta tags that control how your content appears on Facebook, LinkedIn, and other social platforms.
+- **Twitter Cards** - Meta tags that create previews on Twitter/X. These make your shared links have images and descriptions.
 - **Favicons** - Small icons that appear in browser tabs, bookmarks, and home screens. They help users quickly identify your site.
-- **JSON-LD** - Structured data that search engines use to create rich snippets (star ratings, prices, etc.) in search results. This can significantly improve click-through rates.
+- **JSON-LD** - Structured data that search engines use to create snippets (star ratings, prices, etc.) in search results. This can improve click-through rates.
 
 ## Installation
 
-This library requires the Air framework to be installed separately:
-
 ```bash
-# First, install Air framework
-pip install air
-
-# Then install airheads
 pip install airheads
 
 # Or with uv
@@ -37,11 +31,10 @@ uv add air airheads
 ### Simple Usage
 
 ```python
-from air import Html, Body, H1
+import air
 from airheads import build_social_head
 
-# Build a complete head tag with all social and SEO elements
-html = Html(
+air.Html(
     build_social_head(
         title="My Awesome Site",
         description="Welcome to my amazing website",
@@ -51,13 +44,10 @@ html = Html(
         twitter_site="@example",
         keywords=["python", "web", "framework"],
     ),
-    Body(
-        H1("Welcome to My Site")
+    air.Body(
+        air.H1("Welcome to My Site")
     )
 )
-
-# Render to HTML
-print(html.render())
 ```
 
 ### Advanced Usage
@@ -75,7 +65,6 @@ from airheads import (
 
 # Build individual tag groups
 seo_tags = build_seo_meta(
-    title="My Article",
     description="An in-depth guide",
     keywords=["python", "tutorial"],
     canonical_url="https://example.com/article",
@@ -108,7 +97,6 @@ favicon_tags = build_favicon_links(
     apple_touch_icon="/static/apple-touch-icon.png",
 )
 
-# Combine them in a Head tag
 head = Head(
     Title("My Article"),
     *seo_tags,
@@ -120,36 +108,64 @@ head = Head(
 
 ### JSON-LD Structured Data
 
-Add structured data to help search engines display rich results (star ratings, recipes, events, etc.):
+Add structured data to help search engines display results (star ratings, recipes, events, etc.). The `airheads.schema` module provides helpers for common schema.org types so you don't have to manually build complex JSON structures:
 
 ```python
-import json
 from airheads import build_social_head, build_json_ld
+from airheads.schema import build_article_schema
 
-# Create structured data
-article_data = {
-    "@context": "https://schema.org",
-    "@type": "Article",
-    "headline": "My Article",
-    "author": {
-        "@type": "Person",
-        "name": "Jane Developer",
-    },
-    "datePublished": "2025-01-15T10:00:00Z",
-    "image": "https://example.com/article.jpg",
-}
-
-json_ld_tag = build_json_ld(json.dumps(article_data))
-
-# Include in head (pass as extra positional argument)
-head = build_social_head(
-    json_ld_tag,  # Extra children come first as positional args
-    title="My Article",
-    description="An article with structured data",
-    url="https://example.com/article",
+# Easy way: Use schema helpers
+json_ld_str = build_article_schema(
+    headline="My Article",
+    description="An informative piece",
     image="https://example.com/article.jpg",
+    date_published="2025-01-15T10:00:00Z",
+    author_name="Jane Developer",
+    publisher_name="My Blog",
+)
+
+json_ld_tag = build_json_ld(json_ld_str)
+
+# Include in head (pass as extra positional argument after required args)
+head = build_social_head(
+    "My Article",  # title (positional)
+    "An article with structured data",  # description (positional)
+    "https://example.com/article",  # url (positional)
+    "https://example.com/article.jpg",  # image (positional)
+    json_ld_tag,  # Extra children come after required positional args
 )
 ```
+
+#### Schema.org Helpers
+
+Schema.org types are structured data formats that tell search engines exactly what your content is (an article, product, FAQ, etc.) so they can display it with rich features like star ratings, breadcrumbs, or expandable answers.
+
+The `airheads.schema` module includes helpers for the most commonly needed schema types:
+
+**Using Schema Helpers:**
+- **Combine multiple schemas on one page** - Most pages benefit from 2-3 types. For example, an article page often has `build_article_schema()` + `build_breadcrumb_schema()` + `build_person_schema()` for the author.
+- **Match schema to content type** - Use `build_article_schema()` for blog posts, `build_product_schema()` for product pages, etc. More specific is better than generic.
+- **Not every page needs structured data** - Focus on content you want to stand out in search results. Articles, products, FAQs, and tutorials benefit most.
+- **Pass multiple schemas to build_social_head()** - Create each schema with `build_json_ld()`, then pass them as positional args: `build_social_head("title", "desc", "url", "img", schema1, schema2)`
+
+**Article & Content:**
+- `build_article_schema()` - Blog posts, news articles, documentation. Helps search engines show author, publish date, and creates rich snippets.
+- `build_video_schema()` - Video content. Makes videos eligible for Google Video Search and video rich results with thumbnails.
+
+**Navigation & Structure:**
+- `build_breadcrumb_schema()` - Navigation breadcrumbs. Shows your page's position in site hierarchy in search results.
+- `build_website_schema()` - Homepage/site info. Enables sitelink search box in Google search results.
+
+**Interactive Content:**
+- `build_faq_schema()` - FAQ sections. Can appear as expandable FAQ rich results in search, great for voice search.
+- `build_howto_schema()` - Step-by-step guides. Eligible for rich results showing steps directly in search.
+
+**Business & Identity:**
+- `build_product_schema()` - Products/services. Shows price, availability, reviews in search results. Critical for e-commerce.
+- `build_person_schema()` - Author/person profiles. Helps establish authorship and knowledge graph entries.
+- `build_organization_schema()` - Company/organization info. Enables knowledge panels and brand information.
+
+See [schema.py](./src/airheads/schema.py) for complete API documentation and examples.
 
 ## API Reference
 
@@ -160,17 +176,16 @@ The main convenience function that builds a complete `Head` tag with all social 
 **Signature:**
 ```python
 build_social_head(
-    *extra_children: BaseTag,
     title: str,
     description: str,
     url: str,
     image: str,
+    *extra_children: BaseTag,
     **kwargs
 ) -> Head
 ```
 
 **Parameters:**
-- `*extra_children`: Additional tags to include (e.g., Script, Style, custom Meta tags)
 - `title` (str): Page title
 - `description` (str): Page description
 - `url` (str): Canonical URL
@@ -192,7 +207,6 @@ build_social_head(
 Build standard SEO meta tags. These improve your search engine visibility and help search engines understand your content's title, description, and keywords.
 
 **Parameters:**
-- `title` (str): Page title
 - `description` (str): Page description
 - `keywords` (list[str], optional): Keywords for the page
 - `canonical_url` (str, optional): Canonical URL
@@ -292,6 +306,25 @@ twitter_tags = build_twitter_card(
     site="@mysite",
 )
 ```
+
+## Testing
+
+To test that your site's header metadata is working, these are helpful links:
+
+**Social Media Validators:**
+- **Twitter/X Card Validator**: https://cards-dev.twitter.com/validator
+- **LinkedIn Post Inspector**: https://www.linkedin.com/post-inspector/
+- **Facebook Sharing Debugger**: https://developers.facebook.com/tools/debug/
+
+**Open Graph Preview Tools:**
+- https://www.opengraph.xyz/
+- https://www.heymeta.com/
+- https://socialsharepreview.com/
+
+**SEO & Structured Data:**
+- **Google Rich Results Test**: https://search.google.com/test/rich-results
+- **Schema Markup Validator**: https://validator.schema.org/
+- **W3C HTML Validator**: https://validator.w3.org/nu/
 
 ## License
 

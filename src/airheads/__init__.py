@@ -1,5 +1,5 @@
 """
-air-socials: Helper library for building social media cards, SEO tags, and head elements with air.
+airheads: Helper library for building social media cards, SEO tags, and head elements with air.
 
 This library provides convenient functions to generate properly formatted meta tags,
 Open Graph tags, Twitter Cards, and other head elements for optimal SEO and social sharing.
@@ -10,7 +10,7 @@ from collections.abc import Sequence
 from air import Head, Link, Meta, Script, Title
 from air.tags.models.base import BaseTag
 
-__version__ = "0.1.0"
+__version__ = "0.2.0"
 __all__ = [
     "build_seo_meta",
     "build_open_graph",
@@ -20,9 +20,25 @@ __all__ = [
     "build_social_head",
 ]
 
+# Schema.org helpers are in airheads.schema submodule
+
+
+def _validate_url(url: str, param_name: str) -> None:
+    """
+    Validate that a URL is absolute (starts with http:// or https://).
+
+    Args:
+        url: The URL to validate
+        param_name: The parameter name for error messages
+
+    Raises:
+        ValueError: If the URL is not absolute
+    """
+    if not url.startswith(("http://", "https://")):
+        raise ValueError(f"{param_name} must be an absolute URL starting with http:// or https://, got: {url!r}")
+
 
 def build_seo_meta(
-    title: str,
     description: str,
     keywords: Sequence[str] | None = None,
     canonical_url: str | None = None,
@@ -36,7 +52,6 @@ def build_seo_meta(
     Build standard SEO meta tags.
 
     Args:
-        title: Page title (also used in <title> tag)
         description: Page description for search results
         keywords: List of keywords for the page
         canonical_url: Canonical URL to avoid duplicate content issues
@@ -50,9 +65,8 @@ def build_seo_meta(
         List of Meta and Link tags for SEO
 
     Example:
-        >>> from air_socials import build_seo_meta
+        >>> from airheads import build_seo_meta
         >>> tags = build_seo_meta(
-        ...     title="My Awesome Page",
         ...     description="This is a great page",
         ...     keywords=["python", "web", "framework"],
         ...     canonical_url="https://example.com/page"
@@ -60,31 +74,22 @@ def build_seo_meta(
     """
     tags: list[BaseTag] = []
 
-    # Character encoding
     tags.append(Meta(charset=charset))
-
-    # Viewport for responsive design
     tags.append(Meta(name="viewport", content=viewport))
-
-    # Description
     tags.append(Meta(name="description", content=description))
 
-    # Keywords
     if keywords:
         tags.append(Meta(name="keywords", content=", ".join(keywords)))
 
-    # Author
     if author:
         tags.append(Meta(name="author", content=author))
 
-    # Robots
     tags.append(Meta(name="robots", content=robots))
 
-    # Canonical URL
     if canonical_url:
+        _validate_url(canonical_url, "canonical_url")
         tags.append(Link(rel="canonical", href=canonical_url))
 
-    # Theme color
     if theme_color:
         tags.append(Meta(name="theme-color", content=theme_color))
 
@@ -132,7 +137,7 @@ def build_open_graph(
         List of Meta tags with Open Graph properties
 
     Example:
-        >>> from air_socials import build_open_graph
+        >>> from airheads import build_open_graph
         >>> tags = build_open_graph(
         ...     title="My Article",
         ...     description="An interesting article",
@@ -142,6 +147,10 @@ def build_open_graph(
         ...     site_name="My Blog"
         ... )
     """
+    # Validate required URLs
+    _validate_url(url, "url")
+    _validate_url(image, "image")
+
     tags: list[BaseTag] = [
         Meta(property="og:title", content=title),
         Meta(property="og:description", content=description),
@@ -151,11 +160,10 @@ def build_open_graph(
         Meta(property="og:locale", content=locale),
     ]
 
-    # Optional site name
+    if image.startswith("https://"):
+        tags.append(Meta(property="og:image:secure_url", content=image))
     if site_name:
         tags.append(Meta(property="og:site_name", content=site_name))
-
-    # Image details
     if image_alt:
         tags.append(Meta(property="og:image:alt", content=image_alt))
     if image_width:
@@ -163,7 +171,6 @@ def build_open_graph(
     if image_height:
         tags.append(Meta(property="og:image:height", content=str(image_height)))
 
-    # Article-specific metadata
     if type == "article":
         if article_author:
             tags.append(Meta(property="article:author", content=article_author))
@@ -205,7 +212,7 @@ def build_twitter_card(
         List of Meta tags for Twitter Cards
 
     Example:
-        >>> from air_socials import build_twitter_card
+        >>> from airheads import build_twitter_card
         >>> tags = build_twitter_card(
         ...     card_type="summary_large_image",
         ...     title="My Article",
@@ -219,7 +226,6 @@ def build_twitter_card(
         Meta(name="twitter:card", content=card_type),
     ]
 
-    # Optional fields
     if title:
         tags.append(Meta(name="twitter:title", content=title))
     if description:
@@ -259,7 +265,7 @@ def build_favicon_links(
         List of Link tags for favicons and icons
 
     Example:
-        >>> from air_socials import build_favicon_links
+        >>> from airheads import build_favicon_links
         >>> tags = build_favicon_links(
         ...     favicon_ico="/static/favicon.ico",
         ...     favicon_svg="/static/favicon.svg",
@@ -268,25 +274,16 @@ def build_favicon_links(
     """
     tags: list[BaseTag] = []
 
-    # Standard favicon
     if favicon_ico:
         tags.append(Link(rel="icon", href=favicon_ico, type="image/x-icon"))
-
-    # SVG favicon (modern browsers)
     if favicon_svg:
         tags.append(Link(rel="icon", href=favicon_svg, type="image/svg+xml"))
-
-    # Apple touch icon
     if apple_touch_icon:
         tags.append(Link(rel="apple-touch-icon", href=apple_touch_icon))
-
-    # Android icons
     if icon_192:
         tags.append(Link(rel="icon", href=icon_192, sizes="192x192", type="image/png"))
     if icon_512:
         tags.append(Link(rel="icon", href=icon_512, sizes="512x512", type="image/png"))
-
-    # Web app manifest
     if manifest:
         tags.append(Link(rel="manifest", href=manifest))
 
@@ -307,7 +304,7 @@ def build_json_ld(
 
     Example:
         >>> import json
-        >>> from air_socials import build_json_ld
+        >>> from airheads import build_json_ld
         >>> data = {
         ...     "@context": "https://schema.org",
         ...     "@type": "Article",
@@ -380,7 +377,7 @@ def build_social_head(
 
     Example:
         >>> from air import Html, Body, H1
-        >>> from air_socials import build_social_head
+        >>> from airheads import build_social_head
         >>>
         >>> html = Html(
         ...     build_social_head(
@@ -397,13 +394,10 @@ def build_social_head(
         ...     )
         ... )
     """
-    # Use url as canonical if not specified
     if canonical_url is None:
         canonical_url = url
 
-    # Build all the tag components
     seo_tags = build_seo_meta(
-        title=title,
         description=description,
         keywords=keywords,
         canonical_url=canonical_url,
@@ -438,13 +432,22 @@ def build_social_head(
         favicon_ico=favicon_ico,
     )
 
-    # Combine all tags
-    return Head(
-        Title(title),
-        *seo_tags,
-        *og_tags,
-        *twitter_tags,
-        *favicon_tags,
-        *extra_children,
-        **kwargs,
-    )
+    charset_tag = None
+    other_seo_tags = []
+    for tag in seo_tags:
+        if hasattr(tag, "attrs") and "charset" in tag.attrs:
+            charset_tag = tag
+        else:
+            other_seo_tags.append(tag)
+
+    children = []
+    if charset_tag:
+        children.append(charset_tag)
+    children.append(Title(title))
+    children.extend(other_seo_tags)
+    children.extend(og_tags)
+    children.extend(twitter_tags)
+    children.extend(favicon_tags)
+    children.extend(extra_children)
+
+    return Head(*children, **kwargs)
