@@ -23,7 +23,7 @@ There is an example app deployed here, for testing: https://airheads-production.
 pip install airheads
 
 # Or with uv
-uv add air airheads
+uv add airheads
 ```
 
 ## Quick Start
