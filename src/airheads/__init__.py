@@ -10,7 +10,7 @@ from collections.abc import Sequence
 from air import Head, Link, Meta, Script, Title
 from air.tags.models.base import BaseTag
 
-__version__ = "0.3.0"
+__version__ = "0.4.0"
 __all__ = [
     "build_seo_meta",
     "build_open_graph",
